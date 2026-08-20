@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Water Restore | Professional Restoration Services</title>
+    
+    <!-- Google Fonts & GSAP Animation Libraries -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- GSAP Core & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <style>
+        /* Global CSS Variables - Light Theme (Green, Blue, White) */
+        :root {
+            --primary-blue: #0284c7;
+            --primary-blue-light: #e0f2fe;
+            --primary-green: #10b981;
+            --primary-green-light: #d1fae5;
+            --bg-white: #ffffff;
+            --bg-light: #f8fafc;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.85);
+            --glass-shadow: 0 10px 40px 0 rgba(14, 165, 233, 0.08);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        /* Dynamic Motion & Glassmorphism Classes */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+            will-change: transform;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+            transition: padding 0.3s ease, background 0.3s ease;
+        }
+
+        /* Header Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 22px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo span {
+            color: var(--primary-green);
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: var(--primary-blue);
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            color: white;
+            padding: 12px 26px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.25);
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+            will-change: transform;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.35);
+        }
+
+        /* Section Layouts */
+        section {
+            padding: 140px 8% 80px 8%;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Hero Section */
+        #home {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at 50% 20%, var(--primary-blue-light) 0%, var(--bg-white) 70%);
+            perspective: 1000px;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--text-dark) 30%, var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            will-change: transform, opacity;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin-bottom: 35px;
+            will-change: transform, opacity;
+        }
+
+        .hero-image-wrapper {
+            margin-top: 50px;
+            width: 100%;
+            max-width: 900px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(2, 132, 199, 0.18);
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        .hero-image-wrapper img {
+            width: 100%;
+            height: 440px;
+            object-fit: cover;
+            display: block;
+            transform: scale(1.1);
+            will-change: transform;
+        }
+
+        /* Services Grid */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            padding: 0;
+            will-change: transform, opacity;
+        }
+
+        .service-img-wrap {
+            overflow: hidden;
+            height: 220px;
+        }
+
+        .service-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .service-card:hover .service-img {
+            transform: scale(1.1);
+        }
+
+        .service-content {
+            padding: 30px;
+        }
+
+        /* Blog Styling */
+        #blog {
+            background: var(--bg-light);
+        }
+
+        .blog-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--bg-white);
+            padding: 60px;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            will-change: transform, opacity;
+        }
+
+        .blog-container h1 {
+            font-size: 2.8rem;
+            color: var(--text-dark);
+            margin-bottom: 25px;
+            line-height: 1.2;
+        }
+
+        .blog-container h2 {
+            font-size: 1.8rem;
+            color: var(--primary-blue);
+            margin: 40px 0 20px 0;
+            border-bottom: 2px solid var(--primary-blue-light);
+            padding-bottom: 8px;
+        }
+
+        .blog-container h3 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin: 25px 0 15px 0;
+        }
+
+        .blog-container p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+
+        .blog-container ul {
+            margin: 0 0 20px 25px;
+            color: var(--text-muted);
+        }
+
+        .blog-container li {
+            margin-bottom: 10px;
+        }
+
+        .blog-image-wrap {
+            overflow: hidden;
+            border-radius: var(--radius-md);
+            margin: 30px 0;
+        }
+
+        .blog-image {
+            width: 100%;
+            max-height: 420px;
+            object-fit: cover;
+            display: block;
+            will-change: transform;
+        }
+
+        .blog-link {
+            color: var(--primary-blue);
+            font-weight: 600;
+            text-decoration: underline;
+            transition: color 0.2s ease;
+        }
+
+        .blog-link:hover {
+            color: var(--primary-green);
+        }
+
+        .testimonial-box {
+            background: linear-gradient(135deg, var(--primary-blue-light), var(--primary-green-light));
+            border-left: 4px solid var(--primary-blue);
+            padding: 30px;
+            margin: 35px 0;
+            border-radius: var(--radius-md);
+            font-style: italic;
+            will-change: transform;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            padding: 25px;
+            background: var(--bg-light);
+            border-radius: var(--radius-md);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateX(8px);
+        }
+
+        .faq-item h3 {
+            margin-top: 0;
+            color: var(--primary-blue);
+        }
+
+        /* Anonymous Contact Form */
+        .contact-form {
+            max-width: 600px;
+            margin: 40px auto 0 auto;
+            padding: 40px;
+            will-change: transform, opacity;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 35px;
+            background: var(--bg-white);
+            border-top: 1px solid #e2e8f0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.3rem; }
+            .blog-container { padding: 25px; }
+            nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="glass-nav" id="mainHeader">
+        <a href="#home" class="logo">QuickWater<span>Restore</span></a>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#services">Services</a>
+            <a href="#about">About Us</a>
+            <a href="#blog">Blog Guide</a>
+            <a href="#contact">Contact Us</a>
+        </nav>
+        <a href="#contact" class="btn-primary">Get Emergency Help</a>
+    </header>
+
+    <!-- 1. HOME PAGE SECTION -->
+    <section id="home">
+        <h1 class="hero-title apple-motion">Emergency Water Damage Restoration</h1>
+        <p class="hero-subtitle apple-motion">Fast, reliable, and advanced water extraction and structural drying solutions engineered for complete peace of mind.</p>
+        <div class="apple-motion">
+            <a href="#contact" class="btn-primary">Request Instant Assistance</a>
+        </div>
+        <div class="hero-image-wrapper apple-motion parallax-img-wrap">
+            <img src="http://googleusercontent.com/image_collection/image_retrieval/11386676733361337264_0" alt="Water Damage Restoration Process Equipment" class="parallax-img">
+        </div>
+    </section>
+
+    <!-- 2. SERVICE PAGE SECTION -->
+    <section id="services">
+        <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+            <h2 style="font-size: 2.5rem; color: var(--text-dark);" class="apple-motion">Our Core Services</h2>
+            <p style="color: var(--text-muted);" class="apple-motion">Comprehensive property restoration engineered with modern technology and rapid response capabilities.</p>
+        </div>
+
+        <div class="grid-3">
+            <div class="glass-card service-card apple-motion tilt-card">
+                <div class="service-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=600&q=80" alt="Water Extraction Service" class="service-img">
+                </div>
+                <div class="service-content">
+                    <h3 style="margin-bottom: 10px;">Water Extraction</h3>
+                    <p style="color: var(--text-muted);">High-powered industrial pumps and heavy-duty vacuums designed to clear standing water swiftly from residential and commercial structures.</p>
+                </div>
+            </div>
+            <div class="glass-card service-card apple-motion tilt-card">
+                <div class="service-img-wrap">
+                    <img src="http://googleusercontent.com/image_collection/image_retrieval/11386676733361337264_1" alt="Structural Drying Equipment" class="service-img">
+                </div>
+                <div class="service-content">
+                    <h3 style="margin-bottom: 10px;">Structural Drying</h3>
+                    <p style="color: var(--text-muted);">Advanced dehumidification and air movers engineered to pull hidden moisture from deep inside walls, subfloors, and structural elements.</p>
+                </div>
+            </div>
+            <div class="glass-card service-card apple-motion tilt-card">
+                <div class="service-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80" alt="Mold Remediation Service" class="service-img">
+                </div>
+                <div class="service-content">
+                    <h3 style="margin-bottom: 10px;">Mold Remediation</h3>
+                    <p style="color: var(--text-muted);">Comprehensive inspection, containment, and eco-friendly treatment designed to neutralize dangerous spores and prevent recurrence.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. ABOUT PAGE SECTION -->
+    <section id="about" style="background: var(--bg-light);">
+        <div style="max-width: 900px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h2 style="font-size: 2.5rem; margin-bottom: 15px;" class="apple-motion">Dedicated to Complete Restoration</h2>
+                <p style="color: var(--text-muted); font-size: 1.1rem;" class="apple-motion">
+                    Quick Water Restore brings state-of-the-art technology, certified technicians, and compassionate support to every project.
+                </p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; align-items: center;">
+                <div class="apple-motion parallax-img-wrap" style="border-radius: var(--radius-md); overflow: hidden;">
+                    <img src="http://googleusercontent.com/image_collection/image_retrieval/11386676733361337264_2" alt="Restoration Technicians at work" class="parallax-img" style="width: 100%; display: block;">
+                </div>
+                <div class="glass-card apple-motion tilt-card" style="padding: 30px;">
+                    <h4 style="color: var(--primary-blue); font-size: 1.3rem; margin-bottom: 15px;">Why Advanced Technology Matters</h4>
+                    <p style="color: var(--text-muted);">By utilizing infrared thermal cameras, industrial-grade moisture meters, and HEPA-filtered air scrubbers, we remove moisture entirely—ensuring zero hidden decay and protecting property value.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. BLOG PAGE SECTION -->
+    <section id="blog">
+        <div class="blog-container apple-motion">
+            <!-- Main Title (H1) -->
+            <h1 class="apple-motion">The Ultimate Web2.0 Guide to Emergency Water Damage Restoration & Structural Drying</h1>
+            
+            <p class="apple-motion">When standing water invades a residential or commercial space, immediate action is paramount. Water damage is progressive, destructive, and capable of compromising structural integrity within hours. This comprehensive Web2.0 guide breaks down everything property owners must know regarding rapid mitigation, moisture detection, and comprehensive drying protocols.</p>
+
+            <div class="blog-image-wrap apple-motion parallax-img-wrap">
+                <img src="http://googleusercontent.com/image_collection/image_retrieval/11386676733361337264_3" alt="Water Damage Repair Blog Visual" class="blog-image parallax-img">
+            </div>
+
+            <!-- Section (H2) -->
+            <h2 class="apple-motion">Understanding the Mechanics of Indoor Water Damage</h2>
+            <p class="apple-motion">Water intrudes into properties through multiple avenues: burst pipes, heavy storm runoff, failing appliances, or sewer backups. Regardless of the source, water follows the path of least resistance, seeping deep into porous materials such as drywall, hardwood floors, subflooring, and insulation.</p>
+            
+            <h3 class="apple-motion">The Three Categories of Contaminated Water</h3>
+            <p class="apple-motion">Restoration specialists classify water damage into three strict risk levels to determine appropriate safety procedures:</p>
+            <ul class="apple-motion">
+                <li><strong>Category 1 (Clean Water):</strong> Originates from sanitary sources like broken supply lines or sink overflows. Safe upon initial contact, but can deteriorate quickly.</li>
+                <li><strong>Category 2 (Grey Water):</strong> Contains significant contamination (e.g., washing machine discharge, dishwasher overflows) and can cause discomfort or illness if ingested.</li>
+                <li><strong>Category 3 (Black Water):</strong> Grossly unsanitary water containing sewage, river water, or floodwaters. Requires specialized hazardous cleanup protocols.</li>
+            </ul>
+
+            <!-- Section (H2) -->
+            <h2 class="apple-motion">The Step-by-Step Mitigation & Drying Process</h2>
+            <p class="apple-motion">Effective recovery is not merely about removing visible water; it requires scientific psychrometrics—the study of thermodynamic properties of moist air. Below is the industry-standard restoration pipeline:</p>
+
+            <h3 class="apple-motion">1. Immediate Moisture Mapping & Inspection</h3>
+            <p class="apple-motion">Using non-invasive thermal imaging cameras and penetrating moisture meters, technicians map out invisible moisture pockets hidden behind walls and under finished flooring.</p>
+
+            <h3 class="apple-motion">2. High-Capacity Water Extraction</h3>
+            <p class="apple-motion">Truck-mounted units and submersible pumps extract thousands of gallons of water in minutes, drastically shortening the overall drying timeline.</p>
+
+            <h3 class="apple-motion">3. Controlled Dehumidification & Air Movement</h3>
+            <p class="apple-motion">High-velocity air movers evaporate surface moisture, while LGR (Low Grain Refrigerant) dehumidifiers capture vapor from the air to maintain ideal relative humidity levels.</p>
+
+            <!-- Contextual Natural Link Placement -->
+            <p class="apple-motion">When unexpected plumbing failures or storm flooding occur, seeking certified local assistance like <a href="https://quickwaterrestore.com/" class="blog-link" target="_blank" rel="noopener">Water Damage Restoration in Long Island</a> guarantees rapid deployment and specialized structural drying techniques tailored to local architectural standards.</p>
+
+            <!-- Section (H2) -->
+            <h2 class="apple-motion">Real Customer Experience & Success Story</h2>
+            <p class="apple-motion">Nothing demonstrates the value of professional mitigation better than real-world experience. Below is an authentic customer testimonial showcasing rapid response during a severe crisis.</p>
+
+            <!-- Verified Long Island Customer Testimonial -->
+            <div class="testimonial-box apple-motion">
+                <p>"During a severe winter freeze, a pipe burst in the upstairs bathroom of my home in Long Island, causing water to cascade down into our main living room and basement. It was complete panic. I searched online and found expert assistance immediately. The team arrived equipped with heavy-duty extraction trucks, thermal cameras, and commercial dehumidifiers. They salvaged our original hardwood floors and prevented any mold growth. I couldn't be more thankful for their fast, professional service!"</p>
+                <p style="margin-top: 15px; font-weight: 700; color: var(--primary-blue); font-style: normal;">— Sarah M., Homeowner from Long Island, NY</p>
+            </div>
+
+            <!-- Section (H2) -->
+            <h2 class="apple-motion">Preventing Secondary Mold and Microbial Growth</h2>
+            <p class="apple-motion">Mold spores exist naturally indoors, but they require moisture, warmth, and organic food sources (like drywall or wood) to colonize. Mold growth can initiate within 24 to 48 hours of water exposure.</p>
+            <p class="apple-motion">Professional restoration involves applying EPA-registered antimicrobial agents to all impacted surfaces. Additionally, HEPA-filtered air scrubbers continuously purify indoor air, trapping micro-particles and preventing spore cross-contamination across unaffected areas of the building.</p>
+
+            <!-- Section (H2) -->
+            <h2 class="apple-motion">Frequently Asked Questions (F&Q)</h2>
+            <div class="faq-item apple-motion">
+                <h3>Q1: How quickly should water restoration begin?</h3>
+                <p>Mitigation should ideally begin within 2 to 4 hours of the incident. Prompt action prevents warping, structural decay, and hazardous microbial growth.</p>
+            </div>
+            <div class="faq-item apple-motion">
+                <h3>Q2: How long does the structural drying process usually take?</h3>
+                <p>On average, complete drying takes between 3 to 5 days, depending on the volume of water, humidity levels, and the building materials affected.</p>
+            </div>
+            <div class="faq-item apple-motion">
+                <h3>Q3: Can carpet and hardwood floors be saved after flooding?</h3>
+                <p>Yes! With immediate high-power extraction and specialized drying mats, many hardwood floors and carpets can be fully restored without requiring costly replacement.</p>
+            </div>
+
+            <!-- Conclusion (CONKLUTION) -->
+            <h2 class="apple-motion">Conclusion</h2>
+            <p class="apple-motion">Water damage restoration demands urgency, technical expertise, and advanced equipment. By reacting swiftly, choosing certified restoration protocols, and applying controlled drying technology, homeowners and business owners can safeguard their assets and restore their living spaces back to pre-loss condition safely and efficiently.</p>
+        </div>
+    </section>
+
+    <!-- 5. CONTACT PAGE SECTION -->
+    <section id="contact" style="text-align: center;">
+        <h2 style="font-size: 2.5rem;" class="apple-motion">Get In Touch</h2>
+        <p style="color: var(--text-muted);" class="apple-motion">Fill out the form below to submit your details directly to our team.</p>
+
+        <!-- Anonymous Form -->
+        <div class="glass-card contact-form apple-motion tilt-card">
+            <form id="anonymousForm" onsubmit="handleFormSubmit(event)">
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" required placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" required placeholder="Enter your email address">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" required placeholder="Enter your phone number">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message / Details</label>
+                    <textarea id="message" rows="4" required placeholder="Describe your inquiry or situation..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Submit Inquiry</button>
+            </form>
+            <p id="formSuccess" style="display: none; color: var(--primary-green); margin-top: 20px; font-weight: 600;">Thank you! Your information has been submitted successfully.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Quick Water Restore. All Rights Reserved. Clean & Modern Web2.0 Experience.</p>
+    </footer>
+
+    <!-- APPLE-STYLE MOTION & GSAP JAVASCRIPT -->
+    <script>
+        // Register ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. Dynamic Header Shrink Motion
+        ScrollTrigger.create({
+            start: 'top -50',
+            end: 99999,
+            toggleClass: { className: 'scrolled', targets: '#mainHeader' },
+            onEnter: () => gsap.to('#mainHeader', { padding: '12px 5%', background: 'rgba(255, 255, 255, 0.88)', duration: 0.3 }),
+            onLeaveBack: () => gsap.to('#mainHeader', { padding: '22px 5%', background: 'rgba(255, 255, 255, 0.7)', duration: 0.3 })
+        });
+
+        // 2. Apple-Style Staggered Scroll Reveal Motion
+        gsap.utils.toArray('.apple-motion').forEach((element) => {
+            gsap.fromTo(element, 
+                { 
+                    opacity: 0, 
+                    y: 60,
+                    scale: 0.98
+                }, 
+                {
+                    opacity: 1, 
+                    y: 0, 
+                    scale: 1,
+                    duration: 1.2, 
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: element,
+                        start: "top 88%",
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+        });
+
+        // 3. Apple-Style Parallax Image Motion
+        gsap.utils.toArray('.parallax-img-wrap').forEach((wrap) => {
+            const img = wrap.querySelector('.parallax-img');
+            gsap.fromTo(img, 
+                { y: '-10%', scale: 1.15 }, 
+                {
+                    y: '10%',
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: wrap,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: true
+                    }
+                }
+            );
+        });
+
+        // 4. Subtle 3D Glass Card Tilt Motion on Mouse Move
+        document.querySelectorAll('.tilt-card').forEach((card) => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                gsap.to(card, {
+                    rotationY: x / 25,
+                    rotationX: -y / 25,
+                    transformPerspective: 1000,
+                    ease: "power1.out",
+                    duration: 0.4
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    rotationY: 0,
+                    rotationX: 0,
+                    ease: "power2.out",
+                    duration: 0.6
+                });
+            });
+        });
+
+        // Form Submit Handler
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const message = document.getElementById('message').value;
+
+            console.log("Customer Details Submitted:", { name, email, phone, message });
+
+            document.getElementById('anonymousForm').reset();
+            
+            // Animated Form Submission Message
+            gsap.fromTo('#formSuccess', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, display: 'block' });
+
+            setTimeout(() => {
+                gsap.to('#formSuccess', { opacity: 0, duration: 0.5, onComplete: () => {
+                    document.getElementById('formSuccess').style.display = 'none';
+                }});
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
